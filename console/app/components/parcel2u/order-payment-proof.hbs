@@ -1,0 +1,25 @@
+<ContentPanel @title="Payment proof" @open={{true}} @wrapperClass="bordered-classic">
+    {{#if this.hasProof}}
+        <div class="flex flex-col gap-3 p-4">
+            <a href={{this.imageUrl}} target="_blank" rel="noopener noreferrer" class="inline-block max-w-xl">
+                <img
+                    src={{this.imageUrl}}
+                    alt="Payment proof"
+                    class="max-h-96 w-full rounded-lg border border-gray-200 object-contain bg-white"
+                />
+            </a>
+            <a
+                href={{this.imageUrl}}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm font-medium text-blue-600 hover:underline"
+            >
+                Open full size
+            </a>
+        </div>
+    {{else}}
+        <p class="p-4 text-sm text-gray-500">
+            No payment proof is attached to this order.
+        </p>
+    {{/if}}
+</ContentPanel>
