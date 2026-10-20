@@ -28,7 +28,8 @@ export default class AuthTwoFaRoute extends Route {
         // validate 2fa session with server
         let { token, clientToken } = transition.to.queryParams;
 
-        return this.session.store.restore().then(({ identity }) => {
+        return this.session.store.restore().then((restored) => {
+            const { identity } = restored ?? {};
             if (!identity) {
                 this.notifications.error('2FA failed to initialize.');
                 return this.router.transitionTo('auth.login');
@@ -36,7 +37,7 @@ export default class AuthTwoFaRoute extends Route {
 
             return this.fetch
                 .post('two-fa/validate', { token, identity, clientToken })
-                .then(({ clientToken, expired }) => {
+                .then(({ clientToken, method, expired }) => {
                     // handle when code expired
                     if (expired === true) {
                         return this.invalidateTwoFaSession(token, identity);
@@ -47,6 +48,7 @@ export default class AuthTwoFaRoute extends Route {
                         identity,
                         token,
                         clientToken,
+                        method,
                     });
                 })
                 .catch((error) => {
@@ -59,12 +61,18 @@ export default class AuthTwoFaRoute extends Route {
     setupController(controller) {
         super.setupController(...arguments);
 
-        this.session.store.restore().then(({ clientToken, identity }) => {
-            controller.clientToken = clientToken;
-            controller.identity = identity;
-            controller.twoFactorSessionExpiresAfter = controller.getExpirationDateFromClientToken(clientToken);
-            controller.countdownReady = true;
-        });
+        this.session.store
+            .restore()
+            .then((restored) => {
+                const { clientToken, identity, method } = restored ?? {};
+                controller.clientToken = clientToken;
+                controller.identity = identity;
+                controller.method = method;
+                controller.twoFactorSessionExpiresAfter = controller.getExpirationDateFromClientToken(clientToken);
+                // Codes from an authenticator app are not sent, so they do not expire
+                controller.countdownReady = !controller.isAuthenticatorApp;
+            })
+            .catch(() => {});
     }
 
     async invalidateTwoFaSession(token, identity) {

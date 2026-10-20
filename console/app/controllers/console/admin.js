@@ -8,7 +8,15 @@ export default class ConsoleAdminController extends Controller {
     @service intl;
 
     get navigationItems() {
-        return [...this.coreNavigationItems, ...this.registryNavigationItems, ...this.registryPanelItems, this.systemConfigNavigationItem];
+        return [
+            ...this.coreNavigationItems,
+            ...this.registryNavigationItems,
+            ...this.registryPanelItems,
+            this.apiTrafficNavigationItem,
+            this.databaseBackupsNavigationItem,
+            this.authConfigNavigationItem,
+            this.systemConfigNavigationItem,
+        ];
     }
 
     get coreNavigationItems() {
@@ -33,13 +41,6 @@ export default class ConsoleAdminController extends Controller {
                 icon: 'palette',
                 route: 'console.admin.branding',
                 keywords: ['brand', 'logo', 'theme', 'colors'],
-            },
-            {
-                label: this.intl.t('console.admin.menu.2fa-config'),
-                description: 'Configure administrator two-factor authentication policy.',
-                icon: 'shield-halved',
-                route: 'console.admin.two-fa-settings',
-                keywords: ['two factor', '2fa', 'security', 'mfa'],
             },
             {
                 label: this.intl.t('console.admin.menu.platform-api-token'),
@@ -73,6 +74,85 @@ export default class ConsoleAdminController extends Controller {
                 children: (panel.items ?? []).map((menuItem) => this.buildRegistryItem(menuItem, panel)),
             };
         });
+    }
+
+    /**
+     * Who is calling the public API and how hard, and the limits that keep one busy
+     * consumer from starving the rest of the platform.
+     */
+    get apiTrafficNavigationItem() {
+        return {
+            label: 'API Traffic',
+            description: 'Monitor API consumers and configure rate limiting.',
+            icon: 'gauge-high',
+            keywords: ['api', 'traffic', 'rate limit', 'throttle', 'requests'],
+            children: [
+                {
+                    label: 'API Consumers',
+                    description: 'See which API keys, users and addresses drive traffic or are being throttled.',
+                    icon: 'chart-column',
+                    route: 'console.admin.api-consumers',
+                    keywords: ['api', 'consumers', 'usage', 'requests', 'throttled', '429'],
+                },
+                {
+                    label: 'Rate Limits',
+                    description: 'Configure API rate limits and per-organization overrides.',
+                    icon: 'gauge',
+                    route: 'console.admin.rate-limits',
+                    keywords: ['rate limit', 'throttle', 'requests per minute', '429', 'overrides'],
+                },
+                {
+                    label: 'SMS Guard',
+                    description: 'Budgets, pauses and the send ledger that keep SMS pumping in check.',
+                    icon: 'comment-sms',
+                    route: 'console.admin.sms-guard',
+                    keywords: ['sms', 'text message', 'pumping', 'toll fraud', 'budget', 'pause', 'ledger', 'twilio'],
+                },
+            ],
+        };
+    }
+
+    /**
+     * Scheduled database dumps to a filesystem disk, with retention and failure alerts.
+     */
+    get databaseBackupsNavigationItem() {
+        return {
+            label: 'Database Backups',
+            description: 'Schedule database backups, choose where they are stored, and review recent runs.',
+            icon: 'database',
+            route: 'console.admin.database-backups',
+            keywords: ['database', 'backup', 'backups', 'dump', 'mysql', 'retention', 's3', 'restore'],
+        };
+    }
+
+    /**
+     * How people sign in — kept apart from System Config, which is infrastructure
+     * (mail, storage, queues). Grouping only affects the sidebar: each child keeps its
+     * own route, so existing links to the 2FA page are unaffected.
+     */
+    get authConfigNavigationItem() {
+        return {
+            label: 'Auth Config',
+            description: 'Configure how people sign in: OAuth providers and two-factor authentication.',
+            icon: 'user-shield',
+            keywords: ['auth', 'authentication', 'sign in', 'login', 'security'],
+            children: [
+                {
+                    label: this.intl.t('console.admin.menu.oauth'),
+                    description: 'Configure sign-in with Google, Microsoft, GitHub and Apple.',
+                    icon: 'right-to-bracket',
+                    route: 'console.admin.oauth-settings',
+                    keywords: ['oauth', 'sso', 'sign in', 'login', 'google', 'microsoft', 'github', 'apple'],
+                },
+                {
+                    label: this.intl.t('console.admin.menu.2fa-config'),
+                    description: 'Configure administrator two-factor authentication policy.',
+                    icon: 'shield-halved',
+                    route: 'console.admin.two-fa-settings',
+                    keywords: ['two factor', '2fa', 'security', 'mfa'],
+                },
+            ],
+        };
     }
 
     get systemConfigNavigationItem() {

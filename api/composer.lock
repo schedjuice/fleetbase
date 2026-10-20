@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb66989b421ce3fcd5b2d4cd8ac4b228",
+    "content-hash": "35a13a032874ad581a1a018dddf0b22d",
     "packages": [
         {
             "name": "appstract/laravel-opcache",
@@ -2244,16 +2244,16 @@
         },
         {
             "name": "fleetbase/ai",
-            "version": "0.0.4",
+            "version": "0.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/ai.git",
-                "reference": "95df8d2392ec7e1eebcb9d6a3eff29b23cc33111"
+                "reference": "46ebe2bcc22372f65fc45f379f79971b4bf911bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/ai/zipball/95df8d2392ec7e1eebcb9d6a3eff29b23cc33111",
-                "reference": "95df8d2392ec7e1eebcb9d6a3eff29b23cc33111",
+                "url": "https://api.github.com/repos/fleetbase/ai/zipball/46ebe2bcc22372f65fc45f379f79971b4bf911bd",
+                "reference": "46ebe2bcc22372f65fc45f379f79971b4bf911bd",
                 "shasum": ""
             },
             "require": {
@@ -2304,28 +2304,28 @@
             ],
             "support": {
                 "issues": "https://github.com/fleetbase/ai/issues",
-                "source": "https://github.com/fleetbase/ai/tree/v0.0.4"
+                "source": "https://github.com/fleetbase/ai/tree/v0.0.5"
             },
-            "time": "2026-08-07T12:14:27+00:00"
+            "time": "2026-09-22T11:37:32+00:00"
         },
         {
             "name": "fleetbase/core-api",
-            "version": "1.6.61",
+            "version": "1.6.72",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/core-api.git",
-                "reference": "4c763ce293d2e794f9260aca11fb4b52413a74ac"
+                "reference": "931d48e5241e11bb4bb9f988796b030dadf197b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/core-api/zipball/4c763ce293d2e794f9260aca11fb4b52413a74ac",
-                "reference": "4c763ce293d2e794f9260aca11fb4b52413a74ac",
+                "url": "https://api.github.com/repos/fleetbase/core-api/zipball/931d48e5241e11bb4bb9f988796b030dadf197b0",
+                "reference": "931d48e5241e11bb4bb9f988796b030dadf197b0",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php-laravel": "^3.7",
                 "fleetbase/countries": "^0.8.3",
-                "fleetbase/laravel-mysql-spatial": "^1.0.2",
+                "fleetbase/laravel-mysql-spatial": "^1.0.3",
                 "fleetbase/twilio": "^5.0.1",
                 "giggsey/libphonenumber-for-php": "^8.13",
                 "google/apiclient": "^2.18",
@@ -2346,13 +2346,16 @@
                 "laravel-notification-channels/fcm": "^4.1",
                 "laravel-notification-channels/twilio": "^3.3",
                 "laravel/sanctum": "3.2.4",
+                "laravel/socialite": "^5.31",
                 "lcobucci/clock": "3.3.1",
                 "lcobucci/jwt": "^5.4",
                 "maatwebsite/excel": "^3.1",
+                "milon/barcode": "^10.0",
                 "mossadal/math-parser": "^1.3",
-                "php": "^8.0",
+                "php": "^8.1",
                 "phpoffice/phpspreadsheet": "^1.28",
                 "phrity/websocket": "^1.7",
+                "pragmarx/google2fa": "^8.0",
                 "rlanvin/php-rrule": "^2.4",
                 "sentry/sentry-laravel": "*",
                 "spatie/laravel-activitylog": "^4.7",
@@ -2412,9 +2415,9 @@
             ],
             "support": {
                 "issues": "https://github.com/fleetbase/core-api/issues",
-                "source": "https://github.com/fleetbase/core-api/tree/v1.6.61"
+                "source": "https://github.com/fleetbase/core-api/tree/v1.6.72"
             },
-            "time": "2026-09-09T05:07:03+00:00"
+            "time": "2026-10-19T06:20:59+00:00"
         },
         {
             "name": "fleetbase/countries",
@@ -2483,20 +2486,20 @@
         },
         {
             "name": "fleetbase/customer-portal-api",
-            "version": "0.0.13",
+            "version": "0.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/customer-portal.git",
-                "reference": "5822061aa2bc9fd087a154bf91e239fb9cbd1e29"
+                "reference": "f153923f1f925665cc5c2433e296eabd5756582b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/customer-portal/zipball/5822061aa2bc9fd087a154bf91e239fb9cbd1e29",
-                "reference": "5822061aa2bc9fd087a154bf91e239fb9cbd1e29",
+                "url": "https://api.github.com/repos/fleetbase/customer-portal/zipball/f153923f1f925665cc5c2433e296eabd5756582b",
+                "reference": "f153923f1f925665cc5c2433e296eabd5756582b",
                 "shasum": ""
             },
             "require": {
-                "fleetbase/core-api": "*",
+                "fleetbase/core-api": ">=1.6.65",
                 "fleetbase/fleetops-api": "*",
                 "fleetbase/ledger-api": "*",
                 "php": "^8.0",
@@ -2546,29 +2549,29 @@
             ],
             "support": {
                 "issues": "https://github.com/fleetbase/customer-portal/issues",
-                "source": "https://github.com/fleetbase/customer-portal/tree/v0.0.13"
+                "source": "https://github.com/fleetbase/customer-portal/tree/v0.0.16"
             },
-            "time": "2026-08-17T07:11:07+00:00"
+            "time": "2026-10-14T07:30:17+00:00"
         },
         {
             "name": "fleetbase/fleetops-api",
-            "version": "0.6.65",
+            "version": "0.6.74",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/fleetops.git",
-                "reference": "2980fb39cd4ff58442d287907849efea3a2805ba"
+                "reference": "33032e53ebee5e4a514970ee2379c12348c77c54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/fleetops/zipball/2980fb39cd4ff58442d287907849efea3a2805ba",
-                "reference": "2980fb39cd4ff58442d287907849efea3a2805ba",
+                "url": "https://api.github.com/repos/fleetbase/fleetops/zipball/33032e53ebee5e4a514970ee2379c12348c77c54",
+                "reference": "33032e53ebee5e4a514970ee2379c12348c77c54",
                 "shasum": ""
             },
             "require": {
                 "barryvdh/laravel-dompdf": "^3.1",
                 "brick/geo": "0.7.2",
                 "cknow/laravel-money": "^7.1",
-                "fleetbase/core-api": "*",
+                "fleetbase/core-api": "^1.6.69",
                 "geocoder-php/google-maps-places-provider": "^1.4",
                 "giggsey/libphonenumber-for-php": "^8.13",
                 "league/geotools": "^1.1.0",
@@ -2584,6 +2587,7 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.34.1",
+                "illuminate/encryption": "^9.0|^10.0",
                 "nunomaduro/collision": "^7.0",
                 "pestphp/pest": "^2.33.2",
                 "phpstan/phpstan": "^1.10.38",
@@ -2638,22 +2642,22 @@
             ],
             "support": {
                 "issues": "https://github.com/fleetbase/fleetops/issues",
-                "source": "https://github.com/fleetbase/fleetops/tree/v0.6.65"
+                "source": "https://github.com/fleetbase/fleetops/tree/v0.6.74"
             },
-            "time": "2026-09-09T04:39:09+00:00"
+            "time": "2026-10-19T06:21:11+00:00"
         },
         {
             "name": "fleetbase/laravel-mysql-spatial",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/laravel-mysql-spatial.git",
-                "reference": "3dd0c72de5758eea0ec499620c8fed8babb85cb6"
+                "reference": "0fb5bb91295028df1f46d80cb6ccb05838a17f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/laravel-mysql-spatial/zipball/3dd0c72de5758eea0ec499620c8fed8babb85cb6",
-                "reference": "3dd0c72de5758eea0ec499620c8fed8babb85cb6",
+                "url": "https://api.github.com/repos/fleetbase/laravel-mysql-spatial/zipball/0fb5bb91295028df1f46d80cb6ccb05838a17f11",
+                "reference": "0fb5bb91295028df1f46d80cb6ccb05838a17f11",
                 "shasum": ""
             },
             "require": {
@@ -2704,26 +2708,26 @@
             "description": "MySQL spatial data types extension for Laravel x Fleetbase.",
             "support": {
                 "issues": "https://github.com/fleetbase/laravel-mysql-spatial/issues",
-                "source": "https://github.com/fleetbase/laravel-mysql-spatial/tree/v1.0.2"
+                "source": "https://github.com/fleetbase/laravel-mysql-spatial/tree/v1.0.3"
             },
-            "time": "2024-02-15T18:28:47+00:00"
+            "time": "2026-10-03T06:22:15+00:00"
         },
         {
             "name": "fleetbase/ledger-api",
-            "version": "0.0.10",
+            "version": "0.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/ledger.git",
-                "reference": "d2e5de66bb327d64f561204c1c2bca2adc4a6eda"
+                "reference": "e93eadc2d8b6a67a241b63ec30c21e6003c66663"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/ledger/zipball/d2e5de66bb327d64f561204c1c2bca2adc4a6eda",
-                "reference": "d2e5de66bb327d64f561204c1c2bca2adc4a6eda",
+                "url": "https://api.github.com/repos/fleetbase/ledger/zipball/e93eadc2d8b6a67a241b63ec30c21e6003c66663",
+                "reference": "e93eadc2d8b6a67a241b63ec30c21e6003c66663",
                 "shasum": ""
             },
             "require": {
-                "fleetbase/core-api": "*",
+                "fleetbase/core-api": ">=1.6.65",
                 "fleetbase/fleetops-api": "*",
                 "guzzlehttp/guzzle": "^7.0",
                 "php": "^8.0",
@@ -2782,22 +2786,22 @@
             ],
             "support": {
                 "issues": "https://github.com/fleetbase/ledger/issues",
-                "source": "https://github.com/fleetbase/ledger/tree/v0.0.10"
+                "source": "https://github.com/fleetbase/ledger/tree/v0.0.13"
             },
-            "time": "2026-08-17T06:43:11+00:00"
+            "time": "2026-10-14T07:30:39+00:00"
         },
         {
             "name": "fleetbase/registry-bridge",
-            "version": "0.1.9",
+            "version": "0.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/registry-bridge.git",
-                "reference": "b09abc3ae8e7615f1d5cf84c3229340d3d6e1e7f"
+                "reference": "7eecac11e0b9a3ab0ece8728b8a2a9706d89dffd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/registry-bridge/zipball/b09abc3ae8e7615f1d5cf84c3229340d3d6e1e7f",
-                "reference": "b09abc3ae8e7615f1d5cf84c3229340d3d6e1e7f",
+                "url": "https://api.github.com/repos/fleetbase/registry-bridge/zipball/7eecac11e0b9a3ab0ece8728b8a2a9706d89dffd",
+                "reference": "7eecac11e0b9a3ab0ece8728b8a2a9706d89dffd",
                 "shasum": ""
             },
             "require": {
@@ -2810,10 +2814,11 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.34.1",
+                "laravel/framework": "^10.0",
                 "nunomaduro/collision": "^7.0",
                 "pestphp/pest": "^2.33.2",
                 "phpstan/phpstan": "^1.10.38",
-                "symfony/var-dumper": "^5.4.29"
+                "symfony/var-dumper": "^5.4.29|^6.2"
             },
             "type": "library",
             "extra": {
@@ -2864,26 +2869,26 @@
             ],
             "support": {
                 "issues": "https://github.com/fleetbase/registry-bridge/issues",
-                "source": "https://github.com/fleetbase/registry-bridge/tree/v0.1.9"
+                "source": "https://github.com/fleetbase/registry-bridge/tree/v0.1.11"
             },
-            "time": "2026-03-28T05:42:18+00:00"
+            "time": "2026-10-16T08:11:31+00:00"
         },
         {
             "name": "fleetbase/storefront-api",
-            "version": "0.4.21",
+            "version": "0.4.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fleetbase/storefront.git",
-                "reference": "490f9e5a118c19becfc879371fff7f3ff4ea19d7"
+                "reference": "24bef9e72c19a01efd8e374984152dc0bf847338"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fleetbase/storefront/zipball/490f9e5a118c19becfc879371fff7f3ff4ea19d7",
-                "reference": "490f9e5a118c19becfc879371fff7f3ff4ea19d7",
+                "url": "https://api.github.com/repos/fleetbase/storefront/zipball/24bef9e72c19a01efd8e374984152dc0bf847338",
+                "reference": "24bef9e72c19a01efd8e374984152dc0bf847338",
                 "shasum": ""
             },
             "require": {
-                "fleetbase/core-api": "*",
+                "fleetbase/core-api": "^1.6.71",
                 "fleetbase/fleetops-api": "*",
                 "geocoder-php/google-maps-places-provider": "^1.4",
                 "laravel-notification-channels/apn": "^5.0",
@@ -2898,6 +2903,7 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.34.1",
+                "illuminate/validation": "^10.0",
                 "nunomaduro/collision": "^7.0",
                 "pestphp/pest": "^2.33.2",
                 "phpstan/phpstan": "^1.10.38",
@@ -2947,9 +2953,9 @@
             ],
             "support": {
                 "issues": "https://github.com/fleetbase/storefront/issues",
-                "source": "https://github.com/fleetbase/storefront/tree/v0.4.21"
+                "source": "https://github.com/fleetbase/storefront/tree/v0.4.28"
             },
-            "time": "2026-09-04T12:06:15+00:00"
+            "time": "2026-10-20T04:57:25+00:00"
         },
         {
             "name": "fleetbase/twilio",
@@ -6261,16 +6267,16 @@
         },
         {
             "name": "laravel/octane",
-            "version": "v2.19.1",
+            "version": "v2.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/octane.git",
-                "reference": "68a2516a0318baba0de0e4648f61e335c5e69dca"
+                "reference": "c49ff458e94bf14b382f6414c6b9ddb39ac82b28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/octane/zipball/68a2516a0318baba0de0e4648f61e335c5e69dca",
-                "reference": "68a2516a0318baba0de0e4648f61e335c5e69dca",
+                "url": "https://api.github.com/repos/laravel/octane/zipball/c49ff458e94bf14b382f6414c6b9ddb39ac82b28",
+                "reference": "c49ff458e94bf14b382f6414c6b9ddb39ac82b28",
                 "shasum": ""
             },
             "require": {
@@ -6346,7 +6352,7 @@
                 "issues": "https://github.com/laravel/octane/issues",
                 "source": "https://github.com/laravel/octane"
             },
-            "time": "2026-08-13T13:58:52+00:00"
+            "time": "2026-10-14T15:54:28+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -6532,6 +6538,78 @@
                 "source": "https://github.com/laravel/serializable-closure"
             },
             "time": "2024-11-14T18:34:49+00:00"
+        },
+        {
+            "name": "laravel/socialite",
+            "version": "v5.31.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/socialite.git",
+                "reference": "f721b2cbec327ab820bd6aabea6ab211cfcc9f08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/f721b2cbec327ab820bd6aabea6ab211cfcc9f08",
+                "reference": "f721b2cbec327ab820bd6aabea6ab211cfcc9f08",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "firebase/php-jwt": "^6.4|^7.0",
+                "guzzlehttp/guzzle": "^6.0|^7.0|^8.0",
+                "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/http": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "league/oauth1-client": "^1.11",
+                "php": "^8.1",
+                "phpseclib/phpseclib": "^4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^4.18|^5.20|^6.47|^7.55|^8.36|^9.15|^10.8|^11.0",
+                "phpstan/phpstan": "^1.12.23",
+                "phpunit/phpunit": "^8.0|^9.3|^10.4|^11.5|^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Socialite": "Laravel\\Socialite\\Facades\\Socialite"
+                    },
+                    "providers": [
+                        "Laravel\\Socialite\\SocialiteServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Socialite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
+            "homepage": "https://laravel.com",
+            "keywords": [
+                "laravel",
+                "oauth"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/socialite/issues",
+                "source": "https://github.com/laravel/socialite"
+            },
+            "time": "2026-08-31T13:49:19+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -7293,6 +7371,82 @@
                 }
             ],
             "time": "2026-07-09T11:49:27+00:00"
+        },
+        {
+            "name": "league/oauth1-client",
+            "version": "v1.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth1-client.git",
+                "reference": "aa8fe766f772f9233d6c06f9ef003fd8129e408d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth1-client/zipball/aa8fe766f772f9233d6c06f9ef003fd8129e408d",
+                "reference": "aa8fe766f772f9233d6c06f9ef003fd8129e408d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "guzzlehttp/guzzle": "^6.5.8||^7.8.2||^8.0",
+                "guzzlehttp/psr7": "^1.9.1||^2.6.3||^3.0",
+                "php": ">=7.1||>=8.0"
+            },
+            "require-dev": {
+                "ext-simplexml": "*",
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "mockery/mockery": "^1.3.3",
+                "phpstan/phpstan": "^0.12.42",
+                "phpunit/phpunit": "^7.5||9.5"
+            },
+            "suggest": {
+                "ext-simplexml": "For decoding XML-based responses."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev",
+                    "dev-develop": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth1\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Corlett",
+                    "email": "bencorlett@me.com",
+                    "homepage": "http://www.webcomm.com.au",
+                    "role": "Developer"
+                }
+            ],
+            "description": "OAuth 1.0 Client Library",
+            "keywords": [
+                "Authentication",
+                "SSO",
+                "authorization",
+                "bitbucket",
+                "identity",
+                "idp",
+                "oauth",
+                "oauth1",
+                "single sign on",
+                "trello",
+                "tumblr",
+                "twitter"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/oauth1-client/issues",
+                "source": "https://github.com/thephpleague/oauth1-client/tree/v1.12.0"
+            },
+            "time": "2026-09-19T05:12:51+00:00"
         },
         {
             "name": "lorisleiva/cron-translator",
@@ -9414,6 +9568,126 @@
             "time": "2026-08-24T00:54:40+00:00"
         },
         {
+            "name": "phpseclib/phpseclib",
+            "version": "4.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "bb7b959c8159957edae6f5084ebbac765d310e16"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/bb7b959c8159957edae6f5084ebbac765d310e16",
+                "reference": "bb7b959c8159957edae6f5084ebbac765d310e16",
+                "shasum": ""
+            },
+            "require": {
+                "paragonie/constant_time_encoding": "^2|^3",
+                "php": ">=8.1",
+                "symfony/polyfill-php82": "^1.26"
+            },
+            "require-dev": {
+                "brianium/paratest": "^7.22",
+                "ext-xml": "*",
+                "php-parallel-lint/php-parallel-lint": "^1.3",
+                "phpunit/phpunit": "^13",
+                "squizlabs/php_codesniffer": "^3.7",
+                "vimeo/psalm": "*"
+            },
+            "suggest": {
+                "ext-dom": "Install the DOM extension to load XML formatted public keys.",
+                "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
+                "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
+                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "phpseclib/bootstrap.php"
+                ],
+                "psr-4": {
+                    "phpseclib4\\": "phpseclib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Wigginton",
+                    "email": "terrafrost@php.net",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Patrick Monnerat",
+                    "email": "pm@datasphere.ch",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Andreas Fischer",
+                    "email": "bantu@phpbb.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Hans-Jürgen Petrich",
+                    "email": "petrich@tronic-media.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Jack Worman",
+                    "email": "jack.worman@gmail.com",
+                    "homepage": "https://jackworman.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
+            "homepage": "https://phpseclib.com/",
+            "keywords": [
+                "BigInteger",
+                "aes",
+                "asn.1",
+                "asn1",
+                "blowfish",
+                "crypto",
+                "cryptography",
+                "encryption",
+                "rsa",
+                "security",
+                "sftp",
+                "signature",
+                "signing",
+                "ssh",
+                "twofish",
+                "x.509",
+                "x509"
+            ],
+            "support": {
+                "issues": "https://github.com/phpseclib/phpseclib/issues",
+                "source": "https://github.com/phpseclib/phpseclib/tree/4.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/terrafrost",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpseclib",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-08-26T12:15:13+00:00"
+        },
+        {
             "name": "phrity/net-stream",
             "version": "1.3.0",
             "source": {
@@ -9708,6 +9982,58 @@
                 "source": "https://github.com/antonioribeiro/coollection/tree/v0.8.1"
             },
             "time": "2022-09-07T10:32:23+00:00"
+        },
+        {
+            "name": "pragmarx/google2fa",
+            "version": "v8.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/antonioribeiro/google2fa.git",
+                "reference": "6f8d87ebd5afbf7790bde1ffc7579c7c705e0fad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/6f8d87ebd5afbf7790bde1ffc7579c7c705e0fad",
+                "reference": "6f8d87ebd5afbf7790bde1ffc7579c7c705e0fad",
+                "shasum": ""
+            },
+            "require": {
+                "paragonie/constant_time_encoding": "^1.0|^2.0|^3.0",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^7.5.15|^8.5|^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PragmaRX\\Google2FA\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio Carlos Ribeiro",
+                    "email": "acr@antoniocarlosribeiro.com",
+                    "role": "Creator & Designer"
+                }
+            ],
+            "description": "A One Time Password Authentication package, compatible with Google Authenticator.",
+            "keywords": [
+                "2fa",
+                "Authentication",
+                "Two Factor Authentication",
+                "google2fa"
+            ],
+            "support": {
+                "issues": "https://github.com/antonioribeiro/google2fa/issues",
+                "source": "https://github.com/antonioribeiro/google2fa/tree/v8.0.3"
+            },
+            "time": "2024-09-05T11:56:40+00:00"
         },
         {
             "name": "pragmarx/ia-arr",
@@ -14573,6 +14899,86 @@
                 }
             ],
             "time": "2026-04-10T16:19:22+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php82",
+            "version": "v1.38.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php82.git",
+                "reference": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php82/zipball/002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b",
+                "reference": "002dc0cfe5fd4ed6033d48f27d4f19a486c4b04b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php82\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.2+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php82/tree/v1.38.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-05-26T12:45:58+00:00"
         },
         {
             "name": "symfony/polyfill-php83",

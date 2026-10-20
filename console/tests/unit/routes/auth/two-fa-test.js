@@ -64,6 +64,22 @@ module('Unit | Route | auth/two-fa', function (hooks) {
         assert.deepEqual(route.notifications.errors, ['2FA failed to initialize.']);
     });
 
+    test('beforeModel redirects to login when the store restores nothing', async function (assert) {
+        registerSession(this.owner, undefined);
+
+        const route = this.owner.lookup('route:auth/two-fa');
+        let transitionedTo;
+        Object.defineProperty(route.router, 'transitionTo', {
+            configurable: true,
+            value: (routeName) => (transitionedTo = routeName),
+        });
+
+        await route.beforeModel({ to: { queryParams: {} } });
+
+        assert.strictEqual(transitionedTo, 'auth.login');
+        assert.deepEqual(route.notifications.errors, ['2FA failed to initialize.']);
+    });
+
     test('beforeModel persists the refreshed client token when validation succeeds', async function (assert) {
         const persisted = registerSession(this.owner, { identity: 'ron@fleetbase.io' });
 
@@ -71,7 +87,7 @@ module('Unit | Route | auth/two-fa', function (hooks) {
         class FetchStub extends Service {
             post(path, payload) {
                 posted = { path, payload };
-                return Promise.resolve({ clientToken: 'fresh-client-token', expired: false });
+                return Promise.resolve({ clientToken: 'fresh-client-token', method: 'email', expired: false });
             }
         }
         this.owner.register('service:fetch', FetchStub);
@@ -83,7 +99,7 @@ module('Unit | Route | auth/two-fa', function (hooks) {
             path: 'two-fa/validate',
             payload: { token: 'tok', identity: 'ron@fleetbase.io', clientToken: 'stale' },
         });
-        assert.deepEqual(persisted, [{ identity: 'ron@fleetbase.io', token: 'tok', clientToken: 'fresh-client-token' }]);
+        assert.deepEqual(persisted, [{ identity: 'ron@fleetbase.io', token: 'tok', clientToken: 'fresh-client-token', method: 'email' }]);
     });
 
     test('beforeModel invalidates an expired two-factor session', async function (assert) {
@@ -154,5 +170,63 @@ module('Unit | Route | auth/two-fa', function (hooks) {
         assert.strictEqual(controller.clientToken, 'client-token');
         assert.strictEqual(controller.twoFactorSessionExpiresAfter, 'expires:client-token');
         assert.true(controller.countdownReady);
+    });
+
+    test('setupController skips the countdown for codes from an authenticator app', async function (assert) {
+        registerSession(this.owner, { identity: 'ron@fleetbase.io', clientToken: 'client-token', method: 'authenticator_app' });
+
+        const route = this.owner.lookup('route:auth/two-fa');
+        const controller = {
+            get isAuthenticatorApp() {
+                return this.method === 'authenticator_app';
+            },
+            getExpirationDateFromClientToken() {
+                return null;
+            },
+        };
+
+        route.setupController(controller);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        assert.strictEqual(controller.method, 'authenticator_app');
+        assert.false(controller.countdownReady, 'app codes are not sent, so nothing counts down');
+    });
+
+    test('setupController tolerates a store that restores nothing', async function (assert) {
+        registerSession(this.owner, undefined);
+
+        const route = this.owner.lookup('route:auth/two-fa');
+        const controller = {
+            getExpirationDateFromClientToken(token) {
+                return token ?? null;
+            },
+        };
+
+        route.setupController(controller);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        assert.strictEqual(controller.identity, undefined);
+        assert.strictEqual(controller.clientToken, undefined);
+        assert.strictEqual(controller.twoFactorSessionExpiresAfter, null);
+        assert.true(controller.countdownReady);
+    });
+
+    test('setupController swallows a failed restore and leaves the countdown off', async function (assert) {
+        class SessionStub extends Service {
+            store = {
+                restore() {
+                    return Promise.reject(new Error('storage unavailable'));
+                },
+            };
+        }
+        this.owner.register('service:session', SessionStub);
+
+        const route = this.owner.lookup('route:auth/two-fa');
+        const controller = {};
+
+        route.setupController(controller);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        assert.notStrictEqual(controller.countdownReady, true, 'the countdown never starts');
     });
 });
