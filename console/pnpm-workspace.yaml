@@ -1,27 +1,28 @@
+# Flat npm-style node_modules: avoids pnpm's symlink layout, which Ember CLI
+# can't create without Windows Developer Mode and falls back to a pathologically
+# slow copy mode without it.
+nodeLinker: hoisted
 linkWorkspacePackages: deep
 preferWorkspacePackages: true
 publicHoistPattern:
-  - "*ember-core*"
-  - "*ember-ui*"
-  - "*fleetops-data*"
+    - '*ember-core*'
+    - '*ember-ui*'
+    - '*fleetops-data*'
 overrides:
-  "@fleetbase/fleetops-data": "^0.2.3"
-  "@fleetbase/ember-core": "^0.3.26"
-  "@fleetbase/ember-ui": "^0.4.6"
+    '@fleetbase/fleetops-data': '^0.2.3'
+    '@fleetbase/ember-core': '^0.3.26'
+    '@fleetbase/ember-ui': '^0.4.6'
 allowBuilds:
-  "@fortawesome/fontawesome-common-types": false
-  "@fortawesome/fontawesome-svg-core": false
-  "@fortawesome/free-brands-svg-icons": false
-  "@fortawesome/free-solid-svg-icons": false
-  core-js: false
-  fsevents: false
+    '@fortawesome/fontawesome-common-types': false
+    '@fortawesome/fontawesome-svg-core': false
+    '@fortawesome/free-brands-svg-icons': false
+    '@fortawesome/free-solid-svg-icons': false
+    core-js: false
+    fsevents: false
 minimumReleaseAgeExclude:
-  - '@fleetbase/ember-core@0.3.26'
-  - '@fleetbase/ember-ui@0.4.6'
-  - '@fleetbase/fleetops-data@0.2.3'
-  - '@fleetbase/fleetops-engine@0.6.74'
-  - '@fleetbase/storefront-engine@0.4.28'
-  - '@fleetbase/ledger-engine@0.0.13'
-  - '@fleetbase/customer-portal-engine@0.0.16'
-  - '@fleetbase/dev-engine@0.2.18'
-  - '@fleetbase/registry-bridge-engine@0.1.11'
+    - '@fleetbase/ember-ui@0.4.0'
+    - '@fleetbase/fleetops-data@0.2.0'
+    - '@fleetbase/fleetops-engine@0.6.65'
+patchedDependencies:
+    '@fleetbase/ember-ui': patches/@fleetbase__ember-ui.patch
+    '@fleetbase/fleetops-engine': patches/@fleetbase__fleetops-engine.patch

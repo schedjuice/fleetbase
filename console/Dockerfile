@@ -21,6 +21,9 @@ ENV PATH=/root/.pnpm/bin:$PATH
 # Copy package metadata first for better dependency caching
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
+# pnpm patch definitions referenced by pnpm-workspace.yaml
+COPY patches ./patches
+
 # Copy over .npmrc if applicable
 COPY .npmr[c] ./
 
@@ -41,6 +44,16 @@ COPY . .
 
 # Build the application
 RUN pnpm build --environment $ENVIRONMENT
+
+# ---- Dev server stage ----
+# Node toolchain + installed deps for running `ember serve` in development
+# (used by docker-compose.override.yml). Stops before the production build so
+# it reuses the dependency layers from cache.
+FROM builder AS dev
+
+EXPOSE 4200
+
+CMD ["ember", "serve", "--host", "0.0.0.0", "--watcher", "polling"]
 
 # ---- Serve Stage ----
 FROM nginx:alpine

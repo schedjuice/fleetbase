@@ -40,6 +40,20 @@ class RouteServiceProvider extends ServiceProvider
                         );
                     }
                 );
+
+                // Console SPX booking export. Same int/v1 internal prefix and
+                // fleetbase.protected group the packages use for console
+                // routes (CoreServiceProvider, fleetops routes.php).
+                Route::prefix('int/v1')
+                    ->middleware('fleetbase.protected')
+                    ->group(
+                        function () {
+                            Route::post(
+                                'orders/spx-booking-export',
+                                \App\Http\Controllers\SpxBookingExportController::class
+                            );
+                        }
+                    );
             }
         );
     }
