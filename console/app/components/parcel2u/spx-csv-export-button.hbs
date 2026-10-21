@@ -1,0 +1,10 @@
+{{! tabular-actions does not forward wrapperClass to component slots, so the
+    responsive wrapper the descriptor asks for is applied here directly. }}
+<Button
+    @text={{@text}}
+    @icon={{@icon}}
+    @permission={{@permission}}
+    @isLoading={{this.isExporting}}
+    @wrapperClass="hidden md:flex"
+    @onClick={{this.exportSpxCsv}}
+/>

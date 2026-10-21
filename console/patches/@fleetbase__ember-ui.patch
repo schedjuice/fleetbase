@@ -1,0 +1,13 @@
+diff --git a/index.js b/index.js
+index f3b3b6d297ca10114fbb9c4546376a66981809ee..897c79268fa63c6bccc30e7331c991670339a623 100644
+--- a/index.js
++++ b/index.js
+@@ -116,7 +116,7 @@ module.exports = {
+     },
+ 
+     treeForIntlTelInput: function () {
+-        const intlTelInputPath = path.dirname(require.resolve('intl-tel-input')).replace(/build\/js$/, '');
++        const intlTelInputPath = path.dirname(require.resolve('intl-tel-input')).replace(/build[\\/]js$/, '');
+         const trees = [
+             new Funnel(`${intlTelInputPath}/build/js`, {
+                 include: ['utils.js'],

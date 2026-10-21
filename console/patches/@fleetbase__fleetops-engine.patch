@@ -1,0 +1,18 @@
+diff --git a/addon/controllers/operations/orders/index.js b/addon/controllers/operations/orders/index.js
+index bd4a4a24d385f2d83aef1bd82f89557153fd28b7..53ba703500c23b2605c725fea3be3d560dd751a9 100644
+--- a/addon/controllers/operations/orders/index.js
++++ b/addon/controllers/operations/orders/index.js
+@@ -89,6 +89,13 @@ export default class OperationsOrdersIndexController extends Controller {
+                 wrapperClass: 'hidden md:flex',
+                 onClick: this.orderActions.export,
+             },
++            {
++                component: this.spxBookingCsvExportButtonComponent,
++                text: 'Export SPX CSV',
++                icon: 'file-csv',
++                wrapperClass: 'hidden md:flex',
++                permission: 'fleet-ops view order',
++            },
+             {
+                 text: this.intl.t('common.import'),
+                 icon: 'file-import',
