@@ -1,0 +1,82 @@
+<ContentPanel @title="SPX Drop-off" @open={{true}} @wrapperClass="bordered-classic">
+    {{#if this.isNdd}}
+        <div class="flex flex-col gap-4 p-4 text-sm">
+            <div>
+                <div class="font-semibold text-gray-700 dark:text-gray-200">Current dropoff</div>
+                {{#if this.dropoff}}
+                    <div class="text-gray-900 dark:text-white">{{this.dropoff.name}}</div>
+                    <div class="text-gray-500 dark:text-gray-400">{{this.dropoff.address}}</div>
+                {{else}}
+                    <div class="text-gray-500 dark:text-gray-400">No dropoff set.</div>
+                {{/if}}
+            </div>
+
+            <div>
+                <div class="font-semibold text-gray-700 dark:text-gray-200">Final delivery address (SPX delivers here)</div>
+                {{#if this.recipient}}
+                    <div class="text-gray-900 dark:text-white">{{this.recipient.name}} {{this.recipient.phone}}</div>
+                    <div class="text-gray-500 dark:text-gray-400">{{this.recipient.address}}</div>
+                {{else}}
+                    <div class="text-gray-500 dark:text-gray-400">Not recorded yet. It is copied from the current dropoff when you choose an SPX drop-off point.</div>
+                {{/if}}
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="parcel2u-spx-dropoff-point" class="font-semibold text-gray-700 dark:text-gray-200">SPX drop-off point</label>
+                <div class="flex items-center gap-2">
+                    <select id="parcel2u-spx-dropoff-point" class="form-select form-input min-w-0 flex-1" disabled={{this.isLoading}} {{on "change" this.selectPoint}}>
+                        <option value="" selected={{not this.selectedPointId}}>Choose a drop-off point</option>
+                        {{#each this.points as |point|}}
+                            <option value={{point.public_id}} selected={{eq point.public_id this.selectedPointId}}>{{point.name}} ({{point.address}})</option>
+                        {{/each}}
+                    </select>
+                    <Button
+                        @type="primary"
+                        @text="Save"
+                        @icon="save"
+                        @isLoading={{this.isSaving}}
+                        @disabled={{not this.selectedPointId}}
+                        @onClick={{this.saveDropoff}}
+                    />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+                <div class="font-semibold text-gray-700 dark:text-gray-200">Manage drop-off points</div>
+                {{#each this.points as |point|}}
+                    <div class="flex items-center justify-between gap-2">
+                        <div>
+                            <div class="text-gray-900 dark:text-white">{{point.name}}</div>
+                            <div class="text-gray-500 dark:text-gray-400">{{point.address}}</div>
+                        </div>
+                        <Button @type="danger" @size="xs" @text="Remove" @onClick={{fn this.untagPoint point}} />
+                    </div>
+                {{else}}
+                    <div class="text-gray-500 dark:text-gray-400">No SPX drop-off points yet.</div>
+                {{/each}}
+                <div class="flex items-center gap-2">
+                    <div class="flex-1 min-w-0">
+                        <ModelSelect
+                            @modelName="place"
+                            @selectedModel={{this.placeToTag}}
+                            @placeholder="Search places"
+                            @triggerClass="form-select form-input"
+                            @infiniteScroll={{false}}
+                            @customSearchEndpoint="places/search"
+                            @renderInPlace={{true}}
+                            @onChange={{this.choosePlaceToTag}}
+                            as |place|
+                        >
+                            <span class="block truncate">{{place.name}} {{place.address}}</span>
+                        </ModelSelect>
+                    </div>
+                    <Button @text="Add as drop-off point" @icon="plus" @disabled={{not this.placeToTag}} @onClick={{this.tagPlace}} />
+                </div>
+            </div>
+        </div>
+    {{else}}
+        <p class="p-4 text-sm text-gray-500">
+            Only NDD orders go to an SPX drop-off point.
+        </p>
+    {{/if}}
+</ContentPanel>
