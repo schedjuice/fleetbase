@@ -1,10 +1,10 @@
 diff --git a/addon/controllers/operations/orders/index.js b/addon/controllers/operations/orders/index.js
-index bd4a4a24d385f2d83aef1bd82f89557153fd28b7..53ba703500c23b2605c725fea3be3d560dd751a9 100644
+index e857d7158ceaf41947ae7949e685a849d24bb8c1..783744c8531198f8892528cbe2c124f100f277e5 100644
 --- a/addon/controllers/operations/orders/index.js
 +++ b/addon/controllers/operations/orders/index.js
-@@ -89,6 +89,13 @@ export default class OperationsOrdersIndexController extends Controller {
-                 wrapperClass: 'hidden md:flex',
+@@ -100,6 +100,13 @@ export default class OperationsOrdersIndexController extends Controller {
                  onClick: this.orderActions.export,
+                 permission: 'fleet-ops export order',
              },
 +            {
 +                component: this.spxBookingCsvExportButtonComponent,
@@ -14,5 +14,5 @@ index bd4a4a24d385f2d83aef1bd82f89557153fd28b7..53ba703500c23b2605c725fea3be3d56
 +                permission: 'fleet-ops view order',
 +            },
              {
+                 id: 'import-orders',
                  text: this.intl.t('common.import'),
-                 icon: 'file-import',

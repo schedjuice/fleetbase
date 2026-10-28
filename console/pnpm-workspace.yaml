@@ -20,9 +20,9 @@ allowBuilds:
     core-js: false
     fsevents: false
 minimumReleaseAgeExclude:
-    - '@fleetbase/ember-ui@0.4.0'
-    - '@fleetbase/fleetops-data@0.2.0'
-    - '@fleetbase/fleetops-engine@0.6.65'
+    - '@fleetbase/ember-ui@0.4.6'
+    - '@fleetbase/fleetops-data@0.2.3'
+    - '@fleetbase/fleetops-engine@0.6.74'
 patchedDependencies:
     '@fleetbase/ember-ui': patches/@fleetbase__ember-ui.patch
     '@fleetbase/fleetops-engine': patches/@fleetbase__fleetops-engine.patch
