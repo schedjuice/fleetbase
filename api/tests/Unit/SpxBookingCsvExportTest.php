@@ -181,7 +181,7 @@ class SpxBookingCsvExportTest extends TestCase
         $this->assertSame(25.0, $parcels['widthCm']);
         $this->assertSame(15.0, $parcels['heightCm']);
         $this->assertSame('Electronics, Clothing', $parcels['itemName']);
-        $this->assertSame(150.0, $parcels['parcelValue']);
+        $this->assertSame(1.5, $parcels['parcelValue']);
     }
 
     public function test_weight_normalizes_to_natural_decimals(): void
@@ -241,12 +241,22 @@ class SpxBookingCsvExportTest extends TestCase
         $line = explode("\n", $csv)[1];
 
         $this->assertSame(
-            'Alex,82160753,651452,Example Street,#01-01,2,30,20,15,Electronics,1,29072026-A-82160753,100,',
+            'Alex,82160753,651452,Example Street,#01-01,2,30,20,15,Electronics,1,29072026-A-82160753,1,',
             $line
         );
 
         $fields = $this->parseCsvLine($line);
-        $this->assertSame('100', $fields[12]);
+        $this->assertSame('1', $fields[12]);
+    }
+
+    public function test_parcel_value_prints_fractional_dollars_from_cents(): void
+    {
+        $row = $this->row([], [$this->entity(['declaredValue' => 490])]);
+
+        $csv = SpxBookingCsvExport::buildCsv([$row]);
+        $fields = $this->parseCsvLine(explode("\n", $csv)[1]);
+
+        $this->assertSame('4.9', $fields[12]);
     }
 
     public function test_joins_lines_with_lf_and_no_trailing_newline(): void
@@ -317,5 +327,22 @@ class SpxBookingCsvExportTest extends TestCase
     {
         $this->assertSame('Su Yati Chit', SpxBookingCsvExport::resolveRecipientName('Su Yati Chit', ['customer_name' => 'Mashi']));
         $this->assertSame('+6582160753', SpxBookingCsvExport::resolveRecipientPhone('+6582160753', ['customer_phone' => '+6599999999'], '+6591111111'));
+    }
+
+    public function test_recipient_phone_prefers_meta_recipient_phone_over_place(): void
+    {
+        $this->assertSame('+6581234567', SpxBookingCsvExport::resolveRecipientPhone('', ['recipient_phone' => '+6581234567'], '+6591111111'));
+        $this->assertSame('+6582160753', SpxBookingCsvExport::resolveRecipientPhone('', ['customer_phone' => '+6582160753', 'recipient_phone' => '+6581234567'], null));
+    }
+
+    public function test_address_reads_meta_recipient_keys_before_the_dropoff_place(): void
+    {
+        $meta = ['recipient_postal_code' => '651452', 'recipient_street' => ' 452A Bukit Batok ', 'recipient_unit_no' => ''];
+
+        $this->assertSame('651452', SpxBookingCsvExport::metaOr($meta, 'recipient_postal_code', '018989'));
+        $this->assertSame('452A Bukit Batok', SpxBookingCsvExport::metaOr($meta, 'recipient_street', 'SPX Hub Street'));
+        $this->assertSame('#01-01', SpxBookingCsvExport::metaOr($meta, 'recipient_unit_no', ' #01-01 '));
+        $this->assertSame('Hub Building', SpxBookingCsvExport::metaOr($meta, 'recipient_building', 'Hub Building'));
+        $this->assertSame('', SpxBookingCsvExport::metaOr(null, 'recipient_building', null));
     }
 }

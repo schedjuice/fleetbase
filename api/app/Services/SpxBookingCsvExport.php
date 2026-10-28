@@ -23,6 +23,9 @@ use PhpUnitsOfMeasure\PhysicalQuantity\Mass;
  *
  * Number formatting (weights, dimensions, goods value) replicates JavaScript's
  * String(parseFloat(x)): "1.20" becomes "1.2", "2.00" becomes "2".
+ *
+ * Declared value is stored as integer cents (Fleetbase mutators strip
+ * non-digits, so cents is the only lossless form); the export prints dollars.
  */
 class SpxBookingCsvExport
 {
@@ -216,7 +219,9 @@ class SpxBookingCsvExport
      * item names, summed declared value.
      *
      * Each entity array: name, weight, weightUnit, length, width, height,
-     * dimensionsUnit, declaredValue.
+     * dimensionsUnit, declaredValue. declaredValue is integer cents (the sync
+     * worker stores cents because Fleetbase mutators strip non-digits); the
+     * sum is dollars.
      */
     public static function parcelFields(iterable $entities): array
     {
@@ -249,7 +254,7 @@ class SpxBookingCsvExport
                 $names[$name] = true;
             }
             if (isset($entity['declaredValue']) && is_numeric($entity['declaredValue'])) {
-                $value += (float) $entity['declaredValue'];
+                $value += ((float) $entity['declaredValue']) / 100;
             }
         }
 
