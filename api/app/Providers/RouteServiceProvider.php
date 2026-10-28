@@ -58,6 +58,12 @@ class RouteServiceProvider extends ServiceProvider
                                 'orders/spx-booking-export',
                                 [\App\Http\Controllers\SpxBookingExportController::class, '__invoke']
                             );
+
+                            $spxDropoff = \App\Http\Controllers\SpxDropoffController::class;
+                            Route::get('parcel2u/spx-dropoff-points', [$spxDropoff, 'index']);
+                            Route::put('parcel2u/spx-dropoff-points/{place}', [$spxDropoff, 'tag']);
+                            Route::delete('parcel2u/spx-dropoff-points/{place}', [$spxDropoff, 'untag']);
+                            Route::patch('parcel2u/orders/{order}/spx-dropoff', [$spxDropoff, 'assignToOrder']);
                         }
                     );
             }
