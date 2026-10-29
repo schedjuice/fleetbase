@@ -23,6 +23,9 @@ use PhpUnitsOfMeasure\PhysicalQuantity\Mass;
  *
  * Number formatting (weights, dimensions, goods value) replicates JavaScript's
  * String(parseFloat(x)): "1.20" becomes "1.2", "2.00" becomes "2".
+ *
+ * Declared value is stored as integer cents (Fleetbase mutators strip
+ * non-digits, so cents is the only lossless form); the export prints dollars.
  */
 class SpxBookingCsvExport
 {
@@ -216,7 +219,9 @@ class SpxBookingCsvExport
      * item names, summed declared value.
      *
      * Each entity array: name, weight, weightUnit, length, width, height,
-     * dimensionsUnit, declaredValue.
+     * dimensionsUnit, declaredValue. declaredValue is integer cents (the sync
+     * worker stores cents because Fleetbase mutators strip non-digits); the
+     * sum is dollars.
      */
     public static function parcelFields(iterable $entities): array
     {
@@ -249,7 +254,7 @@ class SpxBookingCsvExport
                 $names[$name] = true;
             }
             if (isset($entity['declaredValue']) && is_numeric($entity['declaredValue'])) {
-                $value += (float) $entity['declaredValue'];
+                $value += ((float) $entity['declaredValue']) / 100;
             }
         }
 
@@ -328,10 +333,10 @@ class SpxBookingCsvExport
             id: $order->uuid,
             recipientName: static::resolveRecipientName(trim((string) $order->customer?->name), $order->meta),
             recipientPhone: static::resolveRecipientPhone(trim((string) $order->customer?->phone), $order->meta, $dropoff?->phone),
-            postalCode: trim((string) $dropoff?->postal_code),
-            street: trim((string) $dropoff?->street1),
-            building: trim((string) $dropoff?->building),
-            unitNo: static::unitNo($dropoff),
+            postalCode: static::metaOr($order->meta, 'recipient_postal_code', $dropoff?->postal_code),
+            street: static::metaOr($order->meta, 'recipient_street', $dropoff?->street1),
+            building: static::metaOr($order->meta, 'recipient_building', $dropoff?->building),
+            unitNo: static::metaOr($order->meta, 'recipient_unit_no', static::unitNo($dropoff)),
             weightKg: $parcels['weightKg'],
             lengthCm: $parcels['lengthCm'],
             widthCm: $parcels['widthCm'],
@@ -350,7 +355,7 @@ class SpxBookingCsvExport
      * The recipient is the order's customer morph (Contact or Vendor). Synced
      * orders often carry a NULL morph, so the order meta snapshot
      * (customer_name / customer_phone) applies next, and the phone falls back
-     * once more to the dropoff place before giving up.
+     * to meta recipient_phone and then the dropoff place before giving up.
      */
     public static function resolveRecipientName(?string $morphName, $meta): string
     {
@@ -366,7 +371,7 @@ class SpxBookingCsvExport
 
     public static function resolveRecipientPhone(?string $morphPhone, $meta, ?string $placePhone): string
     {
-        foreach ([$morphPhone, data_get($meta, 'customer_phone'), $placePhone] as $candidate) {
+        foreach ([$morphPhone, data_get($meta, 'customer_phone'), data_get($meta, 'recipient_phone'), $placePhone] as $candidate) {
             $phone = trim((string) $candidate);
             if ($phone !== '') {
                 return $phone;
@@ -374,6 +379,46 @@ class SpxBookingCsvExport
         }
 
         return '';
+    }
+
+    /**
+     * The final-delivery address lives in flat order meta (recipient_*) once an
+     * NDD order's dropoff is moved to an SPX drop-off point; the dropoff place
+     * is the fallback for orders whose dropoff is still the recipient.
+     */
+    public static function metaOr($meta, string $key, ?string $fallback): string
+    {
+        $value = trim((string) data_get($meta, $key));
+
+        return $value !== '' ? $value : trim((string) $fallback);
+    }
+
+    /**
+     * Fill the recipient_* meta keys from the place that is the final delivery
+     * address, unless the meta already carries an address. Existing keys win.
+     */
+    public static function withRecipientSnapshot(array $meta, ?Place $place): array
+    {
+        if (!$place || filled($meta['recipient_street'] ?? null) || filled($meta['recipient_postal_code'] ?? null)) {
+            return $meta;
+        }
+
+        $snapshot = [
+            'recipient_name'        => trim((string) $place->name),
+            'recipient_phone'       => trim((string) $place->phone),
+            'recipient_street'      => trim((string) $place->street1),
+            'recipient_building'    => trim((string) $place->building),
+            'recipient_unit_no'     => static::unitNo($place),
+            'recipient_postal_code' => trim((string) $place->postal_code),
+        ];
+
+        foreach ($snapshot as $key => $value) {
+            if (!filled($meta[$key] ?? null)) {
+                $meta[$key] = $value;
+            }
+        }
+
+        return $meta;
     }
 
     /**

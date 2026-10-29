@@ -1,6 +1,6 @@
 {
-    "API_HOST": "http://192.168.1.33:8000",
-    "SOCKETCLUSTER_HOST": "192.168.1.33",
-    "SOCKETCLUSTER_PORT": "38000",
-    "SOCKETCLUSTER_SECURE": false
+  "API_HOST": "http://localhost:8000",
+  "SOCKETCLUSTER_HOST": "localhost",
+  "SOCKETCLUSTER_PORT": "38000",
+  "SOCKETCLUSTER_SECURE": "false"
 }

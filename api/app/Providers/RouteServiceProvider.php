@@ -44,14 +44,26 @@ class RouteServiceProvider extends ServiceProvider
                 // Console SPX booking export. Same int/v1 internal prefix and
                 // fleetbase.protected group the packages use for console
                 // routes (CoreServiceProvider, fleetops routes.php).
+                //
+                // The explicit '__invoke' is required: the bare Class::class form
+                // leaves the route's controller action without a method name, and
+                // Fleetbase\Support\ControllerResolver (used by the
+                // AuthorizationGuard middleware) reflects on Class@method and
+                // fatals with "Method ...::...() does not exist".
                 Route::prefix('int/v1')
                     ->middleware('fleetbase.protected')
                     ->group(
                         function () {
                             Route::post(
                                 'orders/spx-booking-export',
-                                \App\Http\Controllers\SpxBookingExportController::class
+                                [\App\Http\Controllers\SpxBookingExportController::class, '__invoke']
                             );
+
+                            $spxDropoff = \App\Http\Controllers\SpxDropoffController::class;
+                            Route::get('parcel2u/spx-dropoff-points', [$spxDropoff, 'index']);
+                            Route::put('parcel2u/spx-dropoff-points/{place}', [$spxDropoff, 'tag']);
+                            Route::delete('parcel2u/spx-dropoff-points/{place}', [$spxDropoff, 'untag']);
+                            Route::patch('parcel2u/orders/{order}/spx-dropoff', [$spxDropoff, 'assignToOrder']);
                         }
                     );
             }
