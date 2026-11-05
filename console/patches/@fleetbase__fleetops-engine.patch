@@ -1,5 +1,73 @@
+diff --git a/addon/components/entity/form.hbs b/addon/components/entity/form.hbs
+index 32380a1d6a60d6d3df7e00de2de074f016643520..b1ab88b56885f4bd8344bbe5127ad026c815c8da 100644
+--- a/addon/components/entity/form.hbs
++++ b/addon/components/entity/form.hbs
+@@ -73,6 +73,7 @@
+                     @onCurrencyChange={{fn (mut @resource.currency)}}
+                 />
+             </InputGroup>
++            <Parcel2u::CargoShopPaymentInput @entity={{@resource}} />
+         </div>
+     </ContentPanel>
+ 
+diff --git a/addon/components/modals/entity-form.hbs b/addon/components/modals/entity-form.hbs
+index 2941a81a308dd147a8a0a930e6a45ec658c1856e..61824808170b48ad08787e4673d0c84c23a7e2ba 100644
+--- a/addon/components/modals/entity-form.hbs
++++ b/addon/components/modals/entity-form.hbs
+@@ -47,6 +47,7 @@
+                                 @onCurrencyChange={{fn (mut @options.entity.currency)}}
+                             />
+                         </InputGroup>
++                        <Parcel2u::CargoShopPaymentInput @entity={{@options.entity}} @wrapperClass="mb-2" />
+                     </div>
+                 </ContentPanel>
+ 
+diff --git a/addon/components/parcel2u/cargo-shop-payment-input.hbs b/addon/components/parcel2u/cargo-shop-payment-input.hbs
+new file mode 100644
+index 0000000000000000000000000000000000000000..d09288084f98cf08c97c0356f1c156b9965d10de
+--- /dev/null
++++ b/addon/components/parcel2u/cargo-shop-payment-input.hbs
+@@ -0,0 +1,3 @@
++<InputGroup @name="Cargo Shop Payment" @helpText="Amount the driver pays the cargo shop on collection. Zero when the shop is already paid." @wrapperClass={{@wrapperClass}}>
++    <MoneyInput class="w-full" @value={{this.initialValue}} @currency={{@entity.currency}} @onChange={{this.update}} />
++</InputGroup>
+diff --git a/addon/components/parcel2u/cargo-shop-payment-input.js b/addon/components/parcel2u/cargo-shop-payment-input.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..6392a40a0f12643c7021fc131138e8f1327ec7d7
+--- /dev/null
++++ b/addon/components/parcel2u/cargo-shop-payment-input.js
+@@ -0,0 +1,17 @@
++import Component from '@glimmer/component';
++import { action } from '@ember/object';
++
++/**
++ * Parcel2U "Cargo Shop Payment": what the driver pays the cargo shop to
++ * release this item, in integer cents like the entity's price. It lives in
++ * entity meta (`cargo_shop_payment`) because entities have no column for it.
++ */
++export default class Parcel2uCargoShopPaymentInputComponent extends Component {
++    // Read once: feeding updates back into MoneyInput's <Input> would overwrite AutoNumeric's formatting.
++    initialValue = this.args.entity?.meta?.cargo_shop_payment ?? 0;
++
++    @action update(cents) {
++        const entity = this.args.entity;
++        entity.meta = { ...(entity.meta ?? {}), cargo_shop_payment: cents };
++    }
++}
+diff --git a/addon/controllers/operations/orders/index/details.js b/addon/controllers/operations/orders/index/details.js
+index 306f02af28780b9bdb199a4e04798c0c6e304642..e931e5c3876f371111b21223940e7611bd210847 100644
+--- a/addon/controllers/operations/orders/index/details.js
++++ b/addon/controllers/operations/orders/index/details.js
+@@ -304,7 +304,6 @@ export default class OperationsOrdersIndexDetailsController extends Controller {
+     }
+ 
+     async setupDetailsSession() {
+-        this.index.changeLayout('map');
+         await this.setupRealtime();
+         await this.syncRoutingControl();
+         this.syncMapContext();
 diff --git a/addon/controllers/operations/orders/index.js b/addon/controllers/operations/orders/index.js
-index e857d7158ceaf41947ae7949e685a849d24bb8c1..783744c8531198f8892528cbe2c124f100f277e5 100644
+index e857d7158ceaf41947ae7949e685a849d24bb8c1..2adc4bc1c9c759216fc1307c41b7f6773fa841ef 100644
 --- a/addon/controllers/operations/orders/index.js
 +++ b/addon/controllers/operations/orders/index.js
 @@ -100,6 +100,13 @@ export default class OperationsOrdersIndexController extends Controller {
@@ -8,7 +76,7 @@ index e857d7158ceaf41947ae7949e685a849d24bb8c1..783744c8531198f8892528cbe2c124f1
              },
 +            {
 +                component: this.spxBookingCsvExportButtonComponent,
-+                text: 'Export SPX CSV',
++                text: 'Export CSV',
 +                icon: 'file-csv',
 +                wrapperClass: 'hidden md:flex',
 +                permission: 'fleet-ops view order',
@@ -16,3 +84,24 @@ index e857d7158ceaf41947ae7949e685a849d24bb8c1..783744c8531198f8892528cbe2c124f1
              {
                  id: 'import-orders',
                  text: this.intl.t('common.import'),
+diff --git a/addon/routes/operations/orders/index/details.js b/addon/routes/operations/orders/index/details.js
+index b71da8cf8867b66ce48410cb8ee60d740e6baaaf..5523db1115702847a17f3d31e9fd1c19c6f416b3 100644
+--- a/addon/routes/operations/orders/index/details.js
++++ b/addon/routes/operations/orders/index/details.js
+@@ -78,9 +78,6 @@ export default class OperationsOrdersIndexDetailsRoute extends Route {
+     async setupController(controller, model) {
+         super.setupController(...arguments);
+ 
+-        // Change layout to map
+-        controller.index?.changeLayout?.('map');
+-
+         // load activity and reload order if lightweight payload
+         await model.loadTrackingActivity();
+         if (model.meta?._index_resource) {
+diff --git a/app/components/parcel2u/cargo-shop-payment-input.js b/app/components/parcel2u/cargo-shop-payment-input.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..48f6ed4928e2f8656fd7f59516b666933e7d753c
+--- /dev/null
++++ b/app/components/parcel2u/cargo-shop-payment-input.js
+@@ -0,0 +1 @@
++export { default } from '@fleetbase/fleetops-engine/components/parcel2u/cargo-shop-payment-input';

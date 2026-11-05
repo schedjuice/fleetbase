@@ -1,0 +1,50 @@
+<ContentPanel @title="Cargo shops" @open={{true}} @wrapperClass="bordered-classic">
+    {{#if this.groups.length}}
+        <ol class="flex flex-col gap-3 p-4">
+            {{#each this.groups as |group|}}
+                <li class="rounded-lg border {{if group.unmatched 'border-yellow-300 dark:border-yellow-700' 'border-gray-200 dark:border-gray-700'}}">
+                    <div class="border-b px-4 py-3 {{if group.unmatched 'border-yellow-300 dark:border-yellow-700' 'border-gray-200 dark:border-gray-700'}}">
+                        <div class="text-sm font-semibold {{if group.unmatched 'text-yellow-800 dark:text-yellow-200' 'text-gray-900 dark:text-gray-100'}}">
+                            {{group.title}}
+                        </div>
+                        {{#if group.address}}
+                            <div class="text-xs text-gray-500 dark:text-gray-400">{{group.address}}</div>
+                        {{/if}}
+                        {{#if group.phone}}
+                            <div class="text-xs text-gray-500 dark:text-gray-400">{{group.phone}}</div>
+                        {{/if}}
+                        {{#if group.payment}}
+                            <div class="mt-1 text-xs font-semibold text-orange-700 dark:text-orange-300">Pay shop on collection: {{group.payment}}</div>
+                        {{/if}}
+                    </div>
+                    {{#if group.parcels.length}}
+                        <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                            {{#each group.parcels as |parcel|}}
+                                <li class="flex items-center justify-between gap-3 px-4 py-2 text-sm">
+                                    <div>
+                                        <div class="text-gray-900 dark:text-gray-100">{{parcel.name}}</div>
+                                        {{#if parcel.description}}
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">{{parcel.description}}</div>
+                                        {{/if}}
+                                    </div>
+                                    <div class="shrink-0 text-right text-xs text-gray-500 dark:text-gray-400">
+                                        {{#if parcel.weight}}
+                                            <div>{{parcel.weight}}</div>
+                                        {{/if}}
+                                        {{#if parcel.payment}}
+                                            <div class="font-semibold text-orange-700 dark:text-orange-300">Pay {{parcel.payment}}</div>
+                                        {{/if}}
+                                    </div>
+                                </li>
+                            {{/each}}
+                        </ul>
+                    {{else}}
+                        <p class="px-4 py-2 text-sm text-gray-500">No parcels for this shop.</p>
+                    {{/if}}
+                </li>
+            {{/each}}
+        </ol>
+    {{else}}
+        <p class="p-4 text-sm text-gray-500">This order has no cargo shop pickup.</p>
+    {{/if}}
+</ContentPanel>
