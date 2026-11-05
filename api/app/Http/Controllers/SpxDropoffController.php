@@ -10,9 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * SPX drop-off points for Parcel2U NDD orders: the driver drops parcels at a
- * tagged Fleet-Ops place and SPX delivers to the recipient recorded in order
- * meta (recipient_*). Everything is scoped to the session company.
+ * SPX drop-off points for Parcel2U NDD orders: the route runs pickup (cargo
+ * shop), then the tagged warehouse place as a waypoint, then the customer as
+ * the dropoff. The driver stops at the warehouse and SPX delivers to the
+ * customer. Everything is scoped to the session company.
  */
 class SpxDropoffController extends Controller
 {
@@ -44,7 +45,7 @@ class SpxDropoffController extends Controller
             return $this->unprocessable('Choose a tagged SPX drop-off point.');
         }
 
-        $model = Order::with(['payload.dropoff'])
+        $model = Order::with(['payload.dropoff', 'payload.waypointMarkers'])
             ->where('company_uuid', session('company'))
             ->where(fn ($query) => $query->where('public_id', $order)->orWhere('uuid', $order))
             ->first();
@@ -63,19 +64,63 @@ class SpxDropoffController extends Controller
             return $this->unprocessable(sprintf('The order is %s and can no longer be changed.', $status));
         }
 
-        // A dropoff that is already an SPX point is not the recipient, so it is never snapshotted.
-        $current = $model->payload->dropoff;
-        $recipient = $current?->type === self::PLACE_TYPE ? null : $current;
+        // Orders routed before the waypoint fix had their customer dropoff replaced by the SPX point.
+        $current        = $model->payload->dropoff;
+        $restoreDropoff = $current?->type === self::PLACE_TYPE;
+        if ($restoreDropoff && !filled(data_get($model->meta, 'recipient_street')) && !filled(data_get($model->meta, 'recipient_postal_code'))) {
+            return $this->unprocessable('The customer address is missing. Set the dropoff back to the customer first.');
+        }
 
-        DB::transaction(function () use ($model, $place, $recipient) {
+        DB::transaction(function () use ($model, $place, $current, $restoreDropoff) {
+            $recipient = $restoreDropoff ? $this->recipientPlace((array) $model->meta) : $current;
+            if ($restoreDropoff && $recipient) {
+                $model->payload->setDropoff($recipient, ['save' => true]);
+            }
+
             $model->meta = SpxBookingCsvExport::withRecipientSnapshot((array) $model->meta, $recipient);
             $model->save();
-            $model->payload->setDropoff($place, ['save' => true]);
+            // updateWaypoints replaces any earlier SPX point, so re-assigning never stacks stops.
+            $model->payload->updateWaypoints([['place_uuid' => $place->uuid, 'type' => 'dropoff']]);
         });
 
+        $model->payload->load('dropoff');
+
         return response()->json([
-            'dropoff' => $this->placeJson($place),
-            'meta'    => $model->meta,
+            'waypoint' => $this->placeJson($place),
+            'dropoff'  => $model->payload->dropoff ? $this->placeJson($model->payload->dropoff) : null,
+            'meta'     => $model->meta,
+        ]);
+    }
+
+    /**
+     * The customer place for an order whose dropoff was repointed to an SPX
+     * point: reuse the original place when it still matches the recipient_*
+     * snapshot, else create it from that snapshot.
+     */
+    private function recipientPlace(array $meta): ?Place
+    {
+        $street = trim((string) ($meta['recipient_street'] ?? ''));
+        $postal = trim((string) ($meta['recipient_postal_code'] ?? ''));
+        if ($street === '' && $postal === '') {
+            return null;
+        }
+
+        $existing = $this->places()
+            ->where('street1', $street)
+            ->where('postal_code', $postal)
+            ->where(fn ($query) => $query->whereNull('type')->orWhere('type', '!=', self::PLACE_TYPE))
+            ->latest()
+            ->first();
+
+        return $existing ?? Place::createFromMixed([
+            'name'        => trim((string) ($meta['recipient_name'] ?? '')),
+            'phone'       => trim((string) ($meta['recipient_phone'] ?? '')),
+            'street1'     => $street,
+            'street2'     => trim((string) ($meta['recipient_unit_no'] ?? '')),
+            'building'    => trim((string) ($meta['recipient_building'] ?? '')),
+            'postal_code' => $postal,
+            'city'        => 'Singapore',
+            'country'     => 'SG',
         ]);
     }
 
