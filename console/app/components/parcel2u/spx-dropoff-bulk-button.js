@@ -74,7 +74,7 @@ export default class Parcel2uSpxDropoffBulkButtonComponent extends Component {
 
         const updated = ids.length - skipped.length;
         if (updated > 0) {
-            this.notifications.success(`Set ${point.name} as dropoff on ${updated} order${updated === 1 ? '' : 's'}`);
+            this.notifications.success(`Set ${point.name} as the warehouse stop on ${updated} order${updated === 1 ? '' : 's'}`);
         }
         if (skipped.length > 0) {
             this.notifications.error(`Skipped ${skipped.length}: ${skipped.join('; ')}`);
