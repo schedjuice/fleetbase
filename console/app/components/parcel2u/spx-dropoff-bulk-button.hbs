@@ -1,0 +1,28 @@
+<DropdownButton
+    @text="Set Warehouse Drop-off point"
+    @icon="warehouse"
+    @isLoading={{this.isApplying}}
+    @permission="fleet-ops update order"
+    @wrapperClass="hidden md:flex"
+    @onOpen={{this.loadPoints}}
+    as |dd|
+>
+    <div class="next-dd-menu mt-1 mx-0">
+        <div class="p-1">
+            {{#if this.isLoading}}
+                <div class="px-3 py-2 text-sm text-gray-500">Loading drop-off points...</div>
+            {{else}}
+                {{#each this.points as |point|}}
+                    <a href="javascript:;" class="next-dd-item" {{on "click" (dropdown-fn dd this.applyPoint point)}}>
+                        <div class="py-0.5">
+                            <div class="text-sm font-semibold">{{point.name}}</div>
+                            <div class="text-xs">{{point.address}}</div>
+                        </div>
+                    </a>
+                {{else}}
+                    <div class="px-3 py-2 text-sm text-gray-500">No SPX drop-off points yet. Add one from an NDD order's SPX Drop-off tab.</div>
+                {{/each}}
+            {{/if}}
+        </div>
+    </div>
+</DropdownButton>
