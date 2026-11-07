@@ -15,6 +15,10 @@ ARG ENVIRONMENT=production
 ARG DISABLE_FLEETBASE_ATTRIBUTION=false
 ENV DISABLE_FLEETBASE_ATTRIBUTION=$DISABLE_FLEETBASE_ATTRIBUTION
 
+# Optional: pass DISABLE_RUNTIME_CONFIG=false so a production build reads
+# fleetbase.config.json at runtime (e.g. on Railway). Unset keeps the default.
+ARG DISABLE_RUNTIME_CONFIG
+
 # Add the pnpm global bin to the PATH
 ENV PATH=/root/.pnpm/bin:$PATH
 
