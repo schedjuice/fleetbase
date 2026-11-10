@@ -7,6 +7,9 @@ import { format } from 'date-fns';
 
 import download from '@fleetbase/ember-core/utils/download';
 
+import Parcel2uSpxDropoffBulkButtonComponent from './spx-dropoff-bulk-button';
+import Parcel2uOrderSelectionTypeLockComponent from './order-selection-type-lock';
+
 const PAGE_SIZE = 100;
 const MAX_PAGES = 10;
 
@@ -25,6 +28,11 @@ export default class Parcel2uSpxCsvExportButtonComponent extends Component {
     @service tableContext;
 
     @tracked isExporting = false;
+
+    // The patched toolbar has one Parcel2U component slot; the engine container
+    // cannot resolve host components by name, so the class is handed over.
+    dropoffBulkButton = Parcel2uSpxDropoffBulkButtonComponent;
+    selectionTypeLock = Parcel2uOrderSelectionTypeLockComponent;
 
     get ordersController() {
         return getOwner(this).lookup('controller:operations/orders/index') ?? null;

@@ -6,9 +6,9 @@ import { inject as service } from '@ember/service';
 const POINTS_PATH = 'parcel2u/spx-dropoff-points';
 
 /**
- * "SPX Drop-off" tab for Parcel2U NDD orders: the driver drops parcels at a
- * tagged SPX drop-off point and SPX delivers to the recipient kept in order
- * meta (recipient_*).
+ * "SPX Drop-off" tab for Parcel2U NDD orders: the tagged SPX drop-off point is
+ * a waypoint between pickup and the customer dropoff. The driver stops there
+ * and SPX delivers to the customer.
  *
  * Rendered inside the Fleet-Ops engine context, so only services forwarded
  * from the host (@fleetbase/ember-core exports/services) are injected.
@@ -45,6 +45,10 @@ export default class Parcel2uOrderSpxDropoffComponent extends Component {
 
     get dropoff() {
         return this.order?.payload?.dropoff;
+    }
+
+    get warehouse() {
+        return (this.order?.payload?.waypoints ?? []).find((place) => place.type === 'spx-dropoff') ?? null;
     }
 
     get recipient() {
@@ -87,9 +91,9 @@ export default class Parcel2uOrderSpxDropoffComponent extends Component {
 
         try {
             await this.fetch.patch(`parcel2u/orders/${this.order.id}/spx-dropoff`, { place: this.selectedPointId });
-            this.notifications.success(`Dropoff set to ${this.selectedPoint?.name ?? 'the SPX drop-off point'}`);
+            this.notifications.success(`Warehouse stop set to ${this.selectedPoint?.name ?? 'the SPX drop-off point'}`);
             this.selectedPointId = null;
-            // The order serializer embeds payload (and its dropoff), so one reload refreshes both.
+            // The order serializer embeds payload (dropoff and waypoints), so one reload refreshes all.
             await this.order.reload();
         } catch (error) {
             this.notifications.error(error?.message ?? 'Unable to set the SPX drop-off point');
